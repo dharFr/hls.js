@@ -16,8 +16,7 @@ class Demuxer {
     if (hls.config.enableWorker && (typeof(Worker) !== 'undefined')) {
         logger.log('demuxing in webworker');
         try {
-          debugger
-          var DemuxerWorker = require("worker!../demux/demuxer-worker");
+          var DemuxerWorker = require("worker?inline!../demux/demuxer-worker");
           this.w = new DemuxerWorker();
           this.onwmsg = this.onWorkerMessage.bind(this);
           this.w.addEventListener('message', this.onwmsg);
