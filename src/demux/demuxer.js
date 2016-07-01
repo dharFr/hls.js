@@ -1,6 +1,6 @@
 import Event from '../events';
 import DemuxerInline from '../demux/demuxer-inline';
-import DemuxerWorker from '../demux/demuxer-worker';
+// import DemuxerWorker from '../demux/demuxer-worker';
 import {logger} from '../utils/logger';
 import Decrypter from '../crypt/decrypter';
 
@@ -16,8 +16,9 @@ class Demuxer {
     if (hls.config.enableWorker && (typeof(Worker) !== 'undefined')) {
         logger.log('demuxing in webworker');
         try {
-          var work = require('webworkify');
-          this.w = work(DemuxerWorker);
+          debugger
+          var DemuxerWorker = require("worker!../demux/demuxer-worker");
+          this.w = new DemuxerWorker();
           this.onwmsg = this.onWorkerMessage.bind(this);
           this.w.addEventListener('message', this.onwmsg);
           this.w.postMessage({cmd: 'init', typeSupported : typeSupported, id : id, config: JSON.stringify(hls.config)});
